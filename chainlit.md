@@ -1,14 +1,16 @@
-# Welcome to Chainlit! 🚀🤖
+# 🤲 Welcome to the Islamic Guidance Assistant!
 
-Hi there, Developer! 👋 We're excited to have you on board. Chainlit is a powerful tool designed to help you prototype, debug and share applications built on top of LLMs.
+This assistant is designed to help you find guidance and wisdom from the Holy Quran. 
 
-## Useful Links 🔗
+### How it works:
+- **Search:** It uses advanced AI to search for relevant Quranic verses (ayah) related to your questions.
+- **Guidance:** For every query, it provides the original **Arabic text**, a clear **English translation**, and an authentic **Tafsir** (interpretation).
+- **Context:** The assistant remembers your previous questions during the session to provide more relevant answers.
 
-- **Documentation:** Get started with our comprehensive [Chainlit Documentation](https://docs.chainlit.io) 📚
-- **Discord Community:** Join our friendly [Chainlit Discord](https://discord.gg/k73SQ3FyUh) to ask questions, share your projects, and connect with other developers! 💬
+### Example Questions:
+- "What does the Quran say about patience (Sabr)?"
+- "Find verses about kindness to parents."
+- "How can I find peace in difficult times according to the Quran?"
 
-We can't wait to see what you create with Chainlit! Happy coding! 💻😊
-
-## Welcome screen
-
-To modify the welcome screen, edit the `chainlit.md` file at the root of your project. If you do not want a welcome screen, just leave this file empty.
+---
+*May this tool be a source of guidance and reflection for you.*
