@@ -1,0 +1,630 @@
+/* ═══════════════════════════════════════════════════════════════════
+   ISLAMIC GUIDANCE ASSISTANT — Robotic Dark UI Theme
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* ── CSS Variables ── */
+:root {
+  --gold:         #c9a84c;
+  --gold-bright:  #f0c040;
+  --gold-dim:     #7a5c1e;
+  --emerald:      #00c98d;
+  --emerald-dim:  #00704e;
+  --bg-void:      #030509;
+  --bg-deep:      #060c14;
+  --bg-panel:     #0a1628;
+  --bg-card:      #0e1e38;
+  --bg-glass:     rgba(10, 22, 40, 0.82);
+  --border-glow:  rgba(201, 168, 76, 0.35);
+  --border-line:  rgba(201, 168, 76, 0.15);
+  --text-primary: #e8d5a3;
+  --text-muted:   #7a8fa8;
+  --text-bright:  #f5e6c0;
+  --robot-blue:   #00b4d8;
+  --robot-cyan:   #90e0ef;
+  --shadow-gold:  0 0 20px rgba(201,168,76,0.25);
+  --shadow-robot: 0 0 30px rgba(0,180,216,0.15);
+  --glow-strong:  0 0 40px rgba(201,168,76,0.5), 0 0 80px rgba(201,168,76,0.2);
+}
+
+/* ══════════════════════════════════════
+   GLOBAL RESET & BASE
+══════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  background: var(--bg-void) !important;
+  color: var(--text-primary) !important;
+  font-family: 'Rajdhani', 'Segoe UI', sans-serif !important;
+  letter-spacing: 0.02em;
+}
+
+/* Animated geometric background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(201,168,76,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(0,180,216,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 10% 60%, rgba(0,201,141,0.05) 0%, transparent 60%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 59px,
+      rgba(201,168,76,0.03) 60px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 59px,
+      rgba(201,168,76,0.03) 60px
+    );
+  pointer-events: none;
+  z-index: 0;
+  animation: gridPulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes gridPulse {
+  0%   { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* ══════════════════════════════════════
+   HEADER / NAVBAR
+══════════════════════════════════════ */
+header, [class*="header"], nav[class*="nav"] {
+  background: linear-gradient(135deg, rgba(6,12,20,0.97) 0%, rgba(10,22,40,0.97) 100%) !important;
+  border-bottom: 1px solid var(--border-glow) !important;
+  backdrop-filter: blur(20px) !important;
+  box-shadow: 0 1px 0 var(--border-glow), var(--shadow-gold) !important;
+  position: relative !important;
+  z-index: 100 !important;
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: scanline 4s linear infinite;
+}
+
+@keyframes scanline {
+  0%, 100% { left: 10%; right: 80%; opacity: 1; }
+  50%       { left: 10%; right: 10%; opacity: 0.7; }
+}
+
+/* App Title in header */
+header h1,
+[class*="header"] h1,
+[class*="title"] {
+  font-family: 'Orbitron', monospace !important;
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
+  letter-spacing: 0.15em !important;
+  background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold) 50%, var(--emerald) 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  text-shadow: none !important;
+}
+
+/* ══════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════ */
+aside, [class*="sidebar"], [class*="Sidebar"] {
+  background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-panel) 100%) !important;
+  border-right: 1px solid var(--border-glow) !important;
+  box-shadow: 4px 0 30px rgba(0,0,0,0.5) !important;
+}
+
+/* Sidebar items */
+[class*="sidebar"] button,
+[class*="Sidebar"] button,
+aside button {
+  color: var(--text-primary) !important;
+  border-radius: 8px !important;
+  transition: all 0.25s ease !important;
+  font-family: 'Rajdhani', sans-serif !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.05em !important;
+}
+
+[class*="sidebar"] button:hover,
+aside button:hover {
+  background: rgba(201,168,76,0.1) !important;
+  border-left: 2px solid var(--gold) !important;
+  color: var(--gold-bright) !important;
+  transform: translateX(3px) !important;
+}
+
+/* ══════════════════════════════════════
+   MAIN CHAT CONTAINER
+══════════════════════════════════════ */
+main, [class*="main"], [class*="content"], [role="main"] {
+  background: transparent !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Chat messages container */
+[class*="messages"],
+[class*="Messages"],
+[id*="messages"] {
+  padding: 1.5rem !important;
+  gap: 1.2rem !important;
+}
+
+/* ══════════════════════════════════════
+   MESSAGE BUBBLES
+══════════════════════════════════════ */
+
+/* AI / Assistant Message */
+[class*="message"]:has([class*="assistant"]),
+[data-role="assistant"],
+[class*="bot-message"],
+[class*="ai-message"] {
+  background: linear-gradient(135deg, rgba(10,28,55,0.9) 0%, rgba(14,30,56,0.95) 100%) !important;
+  border: 1px solid var(--border-glow) !important;
+  border-left: 3px solid var(--gold) !important;
+  border-radius: 4px 16px 16px 4px !important;
+  box-shadow: var(--shadow-gold), inset 0 1px 0 rgba(201,168,76,0.1) !important;
+  padding: 1.2rem 1.5rem !important;
+  position: relative;
+  animation: msgSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* User Message */
+[class*="message"]:has([class*="user"]),
+[data-role="user"],
+[class*="user-message"] {
+  background: linear-gradient(135deg, rgba(0,60,40,0.5) 0%, rgba(0,100,60,0.35) 100%) !important;
+  border: 1px solid rgba(0,201,141,0.25) !important;
+  border-right: 3px solid var(--emerald) !important;
+  border-radius: 16px 4px 4px 16px !important;
+  box-shadow: 0 0 20px rgba(0,201,141,0.1) !important;
+  padding: 1rem 1.5rem !important;
+  animation: msgSlideInRight 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+@keyframes msgSlideIn {
+  from { opacity: 0; transform: translateX(-15px) scale(0.97); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes msgSlideInRight {
+  from { opacity: 0; transform: translateX(15px) scale(0.97); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+/* Message text */
+[class*="message"] p,
+[class*="message"] span,
+[class*="message"] div {
+  font-family: 'Rajdhani', sans-serif !important;
+  font-size: 1rem !important;
+  line-height: 1.7 !important;
+  color: var(--text-primary) !important;
+}
+
+/* Code blocks in messages */
+[class*="message"] pre,
+[class*="message"] code {
+  background: rgba(0,0,0,0.6) !important;
+  border: 1px solid rgba(0,180,216,0.2) !important;
+  border-radius: 6px !important;
+  font-size: 0.85rem !important;
+  color: var(--robot-cyan) !important;
+}
+
+/* Arabic text styling */
+[class*="message"] [lang="ar"],
+[class*="message"] *[dir="rtl"] {
+  font-family: 'Amiri', serif !important;
+  font-size: 1.4rem !important;
+  line-height: 2.2 !important;
+  color: var(--gold-bright) !important;
+  text-shadow: 0 0 20px rgba(201,168,76,0.4) !important;
+  direction: rtl;
+}
+
+/* Blockquotes (Quranic verses) */
+[class*="message"] blockquote {
+  border-left: 3px solid var(--gold) !important;
+  background: rgba(201,168,76,0.05) !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 0 8px 8px 0 !important;
+  color: var(--gold-bright) !important;
+  font-style: italic;
+}
+
+/* ══════════════════════════════════════
+   STEP / THINKING INDICATOR
+══════════════════════════════════════ */
+[class*="step"],
+[class*="Step"],
+[class*="thinking"] {
+  background: linear-gradient(135deg, rgba(0,20,40,0.8) 0%, rgba(0,30,60,0.9) 100%) !important;
+  border: 1px solid rgba(0,180,216,0.3) !important;
+  border-radius: 10px !important;
+  padding: 0.75rem 1.25rem !important;
+  margin: 0.5rem 0 !important;
+  font-family: 'Orbitron', monospace !important;
+  font-size: 0.72rem !important;
+  color: var(--robot-cyan) !important;
+  letter-spacing: 0.1em !important;
+  box-shadow: var(--shadow-robot) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+[class*="step"]::before,
+[class*="Step"]::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0,180,216,0.08), transparent);
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  0%   { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* ══════════════════════════════════════
+   CHAT INPUT AREA
+══════════════════════════════════════ */
+
+/* Input wrapper */
+[class*="input-wrapper"],
+[class*="InputWrapper"],
+[class*="chat-input"],
+form[class*="input"] {
+  background: linear-gradient(135deg, rgba(6,12,20,0.97) 0%, rgba(10,22,40,0.97) 100%) !important;
+  border-top: 1px solid var(--border-glow) !important;
+  backdrop-filter: blur(20px) !important;
+  padding: 1rem 1.5rem !important;
+}
+
+/* Text area / input */
+textarea,
+[class*="textarea"],
+[class*="input"]:not(button) {
+  background: rgba(6,12,20,0.95) !important;
+  border: 1px solid var(--border-glow) !important;
+  border-radius: 12px !important;
+  color: var(--text-bright) !important;
+  font-family: 'Rajdhani', sans-serif !important;
+  font-size: 1rem !important;
+  caret-color: var(--gold) !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+  padding: 0.85rem 1.2rem !important;
+  resize: none !important;
+}
+
+textarea::placeholder,
+[class*="textarea"]::placeholder {
+  color: var(--text-muted) !important;
+  font-style: italic;
+}
+
+textarea:focus,
+[class*="textarea"]:focus {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 2px rgba(201,168,76,0.15), var(--shadow-gold) !important;
+  outline: none !important;
+}
+
+textarea::placeholder {
+  color: var(--text-muted) !important;
+  font-style: italic;
+}
+
+/* ══════════════════════════════════════
+   SEND BUTTON
+══════════════════════════════════════ */
+button[type="submit"],
+[class*="send-button"],
+[class*="SendButton"],
+[aria-label*="send" i],
+[aria-label*="Send" i] {
+  background: linear-gradient(135deg, var(--gold-dim) 0%, var(--gold) 50%, var(--gold-bright) 100%) !important;
+  border: none !important;
+  border-radius: 10px !important;
+  color: var(--bg-void) !important;
+  font-family: 'Orbitron', monospace !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.1em !important;
+  box-shadow: var(--shadow-gold) !important;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  padding: 0.65rem 1.2rem !important;
+}
+
+button[type="submit"]:hover,
+[class*="send-button"]:hover {
+  transform: scale(1.08) !important;
+  box-shadow: var(--glow-strong) !important;
+}
+
+button[type="submit"]:active {
+  transform: scale(0.96) !important;
+}
+
+/* ══════════════════════════════════════
+   ALL OTHER BUTTONS
+══════════════════════════════════════ */
+button:not([type="submit"]):not([class*="send"]) {
+  font-family: 'Rajdhani', sans-serif !important;
+  transition: all 0.25s ease !important;
+  color: var(--text-primary) !important;
+}
+
+button:not([type="submit"]):hover {
+  color: var(--gold-bright) !important;
+}
+
+/* Icon buttons */
+[class*="icon-button"],
+[class*="IconButton"] {
+  color: var(--text-muted) !important;
+  border-radius: 8px !important;
+  transition: all 0.25s ease !important;
+}
+
+[class*="icon-button"]:hover {
+  background: rgba(201,168,76,0.1) !important;
+  color: var(--gold) !important;
+}
+
+/* ══════════════════════════════════════
+   WELCOME / WATERMARK TEXT
+══════════════════════════════════════ */
+[class*="watermark"],
+[class*="welcome"],
+[class*="empty-state"] {
+  font-family: 'Orbitron', monospace !important;
+  color: var(--gold-dim) !important;
+  letter-spacing: 0.1em !important;
+  opacity: 0.6 !important;
+}
+
+/* ══════════════════════════════════════
+   SCROLLBAR
+══════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-void);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--gold-dim), var(--gold));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-bright);
+}
+
+/* ══════════════════════════════════════
+   LOGIN PAGE
+══════════════════════════════════════ */
+[class*="login"],
+[class*="Login"],
+[class*="auth"] {
+  background: var(--bg-void) !important;
+}
+
+/* Login card */
+[class*="login"] [class*="card"],
+[class*="auth-card"],
+[class*="login-card"] {
+  background: linear-gradient(135deg, var(--bg-panel) 0%, var(--bg-card) 100%) !important;
+  border: 1px solid var(--border-glow) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--shadow-gold), var(--shadow-robot) !important;
+}
+
+/* OAuth buttons */
+[class*="oauth"],
+[class*="OAuth"] {
+  background: linear-gradient(135deg, rgba(0,180,216,0.1) 0%, rgba(0,180,216,0.2) 100%) !important;
+  border: 1px solid rgba(0,180,216,0.4) !important;
+  border-radius: 10px !important;
+  color: var(--robot-cyan) !important;
+  transition: all 0.3s ease !important;
+}
+
+[class*="oauth"]:hover {
+  background: rgba(0,180,216,0.25) !important;
+  box-shadow: 0 0 20px rgba(0,180,216,0.3) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ══════════════════════════════════════
+   CHIPS / TAGS / BADGES
+══════════════════════════════════════ */
+[class*="chip"],
+[class*="Chip"],
+[class*="badge"],
+[class*="tag"] {
+  background: rgba(201,168,76,0.12) !important;
+  border: 1px solid rgba(201,168,76,0.3) !important;
+  border-radius: 20px !important;
+  color: var(--gold) !important;
+  font-family: 'Rajdhani', sans-serif !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* ══════════════════════════════════════
+   TOOLTIPS & MODALS
+══════════════════════════════════════ */
+[class*="tooltip"],
+[class*="Tooltip"] {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-glow) !important;
+  border-radius: 8px !important;
+  color: var(--text-primary) !important;
+  font-family: 'Rajdhani', sans-serif !important;
+  box-shadow: var(--shadow-gold) !important;
+}
+
+[class*="modal"],
+[class*="Modal"],
+[class*="dialog"],
+[class*="Dialog"] {
+  background: var(--bg-panel) !important;
+  border: 1px solid var(--border-glow) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--glow-strong), 0 25px 60px rgba(0,0,0,0.7) !important;
+}
+
+/* ══════════════════════════════════════
+   DECORATIVE ISLAMIC GEOMETRIC CORNER
+══════════════════════════════════════ */
+body::after {
+  content: '☪';
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  font-size: 120px;
+  color: rgba(201,168,76,0.04);
+  pointer-events: none;
+  z-index: 0;
+  animation: rotateSymbol 60s linear infinite;
+  user-select: none;
+}
+
+@keyframes rotateSymbol {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ══════════════════════════════════════
+   MARKDOWN CONTENT STYLING
+══════════════════════════════════════ */
+[class*="markdown"],
+[class*="Markdown"],
+.prose {
+  color: var(--text-primary) !important;
+}
+
+[class*="markdown"] h1,
+[class*="markdown"] h2,
+[class*="markdown"] h3 {
+  font-family: 'Orbitron', monospace !important;
+  color: var(--gold-bright) !important;
+  letter-spacing: 0.08em !important;
+  border-bottom: 1px solid var(--border-line) !important;
+  padding-bottom: 0.4em !important;
+}
+
+[class*="markdown"] h1 { font-size: 1.3rem !important; }
+[class*="markdown"] h2 { font-size: 1.1rem !important; }
+[class*="markdown"] h3 { font-size: 0.95rem !important; }
+
+[class*="markdown"] strong, b {
+  color: var(--gold-bright) !important;
+  font-weight: 700 !important;
+}
+
+[class*="markdown"] em, i {
+  color: var(--robot-cyan) !important;
+}
+
+[class*="markdown"] a {
+  color: var(--emerald) !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(0,201,141,0.3) !important;
+  transition: all 0.2s ease !important;
+}
+
+[class*="markdown"] a:hover {
+  color: var(--gold-bright) !important;
+  border-bottom-color: var(--gold) !important;
+}
+
+[class*="markdown"] ul li::marker,
+[class*="markdown"] ol li::marker {
+  color: var(--gold) !important;
+}
+
+[class*="markdown"] hr {
+  border: none !important;
+  height: 1px !important;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent) !important;
+  margin: 1.5rem 0 !important;
+}
+
+/* ══════════════════════════════════════
+   LOADING / SPINNER
+══════════════════════════════════════ */
+[class*="loader"],
+[class*="spinner"],
+[class*="loading"] {
+  border-color: var(--gold-dim) !important;
+  border-top-color: var(--gold-bright) !important;
+}
+
+/* ══════════════════════════════════════
+   AVATARS
+══════════════════════════════════════ */
+[class*="avatar"],
+[class*="Avatar"] {
+  background: linear-gradient(135deg, var(--gold-dim), var(--gold)) !important;
+  border: 2px solid var(--gold) !important;
+  box-shadow: 0 0 15px rgba(201,168,76,0.4) !important;
+  font-family: 'Orbitron', monospace !important;
+  color: var(--bg-void) !important;
+  font-weight: 900 !important;
+}
+
+/* ══════════════════════════════════════
+   SELECTION
+══════════════════════════════════════ */
+::selection {
+  background: rgba(201,168,76,0.3);
+  color: var(--gold-bright);
+}
+
+/* ══════════════════════════════════════
+   SMOOTH TRANSITIONS EVERYWHERE
+══════════════════════════════════════ */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Overrides for inputs and specific fast elements */
+textarea, input, button {
+  transition-duration: 0.2s !important;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE TWEAKS
+══════════════════════════════════════ */
+@media (max-width: 768px) {
+  body::after {
+    font-size: 80px;
+    bottom: 70px;
+    right: 12px;
+  }
+  
+  [class*="message"] {
+    padding: 0.8rem 1rem !important;
+  }
+}
