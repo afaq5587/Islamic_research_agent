@@ -12,7 +12,7 @@ load_dotenv()
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.middleware.cors import CORSMiddleware
 from agents import Runner
 
@@ -41,6 +41,8 @@ MAX_MEMORY = 5
 async def serve_index():
     """Serve the main chat UI."""
     index_path = PUBLIC_DIR / "index.html"
+    if not index_path.exists():
+        return PlainTextResponse("Error: index.html is missing from the deployment.", status_code=500)
     return FileResponse(str(index_path))
 
 @app.post("/chat")
