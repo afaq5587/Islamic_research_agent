@@ -14,9 +14,10 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.middleware.cors import CORSMiddleware
-from agents import Runner
-
-from agent_core import get_agent
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, PlainTextResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Islamic Guidance Assistant")
 
@@ -37,6 +38,23 @@ else:
 # Session memory store: {session_id: [(q, a), ...]}
 session_memory: dict[str, list] = {}
 MAX_MEMORY = 5
+
+# Lazy agent initialization
+_agent_cache = None
+
+def get_agent_unsafe():
+    """Load agent on first use (lazy initialization)."""
+    global _agent_cache
+    if _agent_cache is not None:
+        return _agent_cache
+    
+    try:
+        from agents import Runner
+        from agent_core import get_agent
+        _agent_cache = get_agent()
+        return _agent_cache
+    except Exception as e:
+        return None
 
 
 @app.get("/")
@@ -72,12 +90,15 @@ async def chat_endpoint(request: Request):
 
         contextual_query = context_prompt + f"\nNow answer this: {query}"
 
-        # Run agent
-        try:
-            agent = get_agent()
-        except RuntimeError as e:
-            return {"type": "error", "message": str(e)}
+        # Run agent (lazy load)
+        agent = get_agent_unsafe()
+        if agent is None:
+            return {
+                "type": "error",
+                "message": "Agent not available. Check GEMINI_API_KEY is set in environment."
+            }
 
+        from agents import Runner
         result = await Runner.run(agent, input=contextual_query)
         answer = result.final_output
 
@@ -133,8 +154,14 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
 
             try:
                 try:
-                    agent = get_agent()
-                except RuntimeError as e:
+                    agent = get_agent_unsafe()
+                    if agent is None:
+                        await websocket.send_text(json.dumps({
+                            "type": "error",
+                            "message": "Agent not available. Check GEMINI_API_KEY is set in environment."
+                        }))
+                        continue
+                except Exception as e:
                     await websocket.send_text(json.dumps({
                         "type": "error",
                         "message": str(e)
@@ -142,6 +169,7 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
                     break
 
                 # Run agent
+                from agents import Runner
                 result = await Runner.run(agent, input=contextual_query)
                 answer = result.final_output
 
