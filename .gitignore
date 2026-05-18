@@ -16,3 +16,5 @@ dist/
 
 # Chainlit
 .files/
+.vercel
+.env*.local

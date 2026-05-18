@@ -16,7 +16,7 @@ from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.middleware.cors import CORSMiddleware
 from agents import Runner
 
-from agent_core import agent
+from agent_core import get_agent
 
 app = FastAPI(title="Islamic Guidance Assistant")
 
@@ -28,9 +28,11 @@ app.add_middleware(
 )
 
 # Serve static files (CSS, JS, assets)
-PUBLIC_DIR = Path(__file__).parent / "public"
+PUBLIC_DIR = Path(__file__).resolve().parent / "public"
 if PUBLIC_DIR.exists():
     app.mount("/public", StaticFiles(directory=str(PUBLIC_DIR)), name="public")
+else:
+    raise RuntimeError(f"Public folder not found: {PUBLIC_DIR}")
 
 # Session memory store: {session_id: [(q, a), ...]}
 session_memory: dict[str, list] = {}
@@ -71,6 +73,11 @@ async def chat_endpoint(request: Request):
         contextual_query = context_prompt + f"\nNow answer this: {query}"
 
         # Run agent
+        try:
+            agent = get_agent()
+        except RuntimeError as e:
+            return {"type": "error", "message": str(e)}
+
         result = await Runner.run(agent, input=contextual_query)
         answer = result.final_output
 
@@ -125,6 +132,15 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
             }))
 
             try:
+                try:
+                    agent = get_agent()
+                except RuntimeError as e:
+                    await websocket.send_text(json.dumps({
+                        "type": "error",
+                        "message": str(e)
+                    }))
+                    break
+
                 # Run agent
                 result = await Runner.run(agent, input=contextual_query)
                 answer = result.final_output

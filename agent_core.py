@@ -18,22 +18,32 @@ load_dotenv()
 gemini_api_key = os.getenv("GEMINI_API_KEY")
 tavily_api_key = os.getenv("TAVILY_API_KEY")
 
-if not gemini_api_key:
-    raise ValueError("GEMINI_API_KEY is not set. Please ensure it is defined in your .env file.")
+external_client = None
+model = None
+agent = None
 
-external_client = AsyncOpenAI(
-    api_key=gemini_api_key,
-    base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
-)
+if gemini_api_key:
+    external_client = AsyncOpenAI(
+        api_key=gemini_api_key,
+        base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+    )
 
-# Using gemini-2.5-flash for the best balance of reasoning, speed, and tool-calling stability
-model = OpenAIChatCompletionsModel(
-    model="gemini-2.5-flash",
-    openai_client=external_client
-)
-    
-set_default_openai_client(external_client)
-set_tracing_disabled(True)
+    # Using gemini-2.5-flash for the best balance of reasoning, speed, and tool-calling stability
+    model = OpenAIChatCompletionsModel(
+        model="gemini-2.5-flash",
+        openai_client=external_client
+    )
+        
+    set_default_openai_client(external_client)
+    set_tracing_disabled(True)
+
+
+def get_agent():
+    if agent is None:
+        raise RuntimeError(
+            "GEMINI_API_KEY is not configured. Please set GEMINI_API_KEY as a Vercel environment variable."
+        )
+    return agent
 
 # Quran Foundation API Configuration
 QURAN_API_BASE = "https://api.quran.com/api/v4"
@@ -127,31 +137,32 @@ async def get_current_date_and_time() -> str:
             pass
     return f"Current Time: {time_str}\\nGregorian Date: {date_str}"
 
-agent = Agent(
-    name="IslamicGuidanceAgent",
-    instructions=(
-        "You are a knowledgeable and empathetic Islamic guidance assistant specializing in the Quran. "
-        "Your goal is to provide deep insights using the Quran, Tafsir, and recitations. You can also search the web for the latest updates.\n\n"
-        "Research Capabilities:\n"
-        "1. **Quran Search**: Use `search_quran` to find verses based on keywords or concepts.\n"
-        "2. **Tafsir**: Use `get_verse_explanation` to provide scholarly context and detailed meanings of verses. NEVER rely on general knowledge; always pull from the Tafsir tool for accuracy.\n"
-        "3. **Audio**: Use `get_verse_audio` to provide recitation links when a user wants to hear a verse.\n"
-        "4. **Date & Time**: Use `get_current_date_and_time` to get the current Gregorian date, Hijri date, or time when requested.\n"
-        "5. **Web Search**: Use `search_tavily` for latest updates, news, or information not covered by Quranic tools.\n\n"
-        "Guidelines:\n"
-        "- Prioritize Quranic sources for religious questions.\n"
-        "- Use `search_tavily` for current events or general knowledge outside the Quran.\n"
-        "- When providing a verse, aim to include its Tafsir context using `get_verse_explanation` to ensure a correct and scholarly understanding.\n"
-        "- CRITICAL: ALWAYS provide the exact Arabic textual verses alongside their translations when referencing the Quran. Do NOT just summarize the Ayat, you MUST provide the specific Arabic text.\n"
-        "- Always be respectful and professional.\n"
-        "- Format responses clearly using markdown with headings, bold text, and organized sections."
-    ),
-    tools=[
-        search_quran,
-        get_verse_explanation,
-        get_verse_audio,
-        search_tavily,
-        get_current_date_and_time,
-    ],
-    model=model
-)
+if model is not None:
+    agent = Agent(
+        name="IslamicGuidanceAgent",
+        instructions=(
+            "You are a knowledgeable and empathetic Islamic guidance assistant specializing in the Quran. "
+            "Your goal is to provide deep insights using the Quran, Tafsir, and recitations. You can also search the web for the latest updates.\n\n"
+            "Research Capabilities:\n"
+            "1. **Quran Search**: Use `search_quran` to find verses based on keywords or concepts.\n"
+            "2. **Tafsir**: Use `get_verse_explanation` to provide scholarly context and detailed meanings of verses. NEVER rely on general knowledge; always pull from the Tafsir tool for accuracy.\n"
+            "3. **Audio**: Use `get_verse_audio` to provide recitation links when a user wants to hear a verse.\n"
+            "4. **Date & Time**: Use `get_current_date_and_time` to get the current Gregorian date, Hijri date, or time when requested.\n"
+            "5. **Web Search**: Use `search_tavily` for latest updates, news, or information not covered by Quranic tools.\n\n"
+            "Guidelines:\n"
+            "- Prioritize Quranic sources for religious questions.\n"
+            "- Use `search_tavily` for current events or general knowledge outside the Quran.\n"
+            "- When providing a verse, aim to include its Tafsir context using `get_verse_explanation` to ensure a correct and scholarly understanding.\n"
+            "- CRITICAL: ALWAYS provide the exact Arabic textual verses alongside their translations when referencing the Quran. Do NOT just summarize the Ayat, you MUST provide the specific Arabic text.\n"
+            "- Always be respectful and professional.\n"
+            "- Format responses clearly using markdown with headings, bold text, and organized sections."
+        ),
+        tools=[
+            search_quran,
+            get_verse_explanation,
+            get_verse_audio,
+            search_tavily,
+            get_current_date_and_time,
+        ],
+        model=model
+    )

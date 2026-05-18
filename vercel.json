@@ -5,7 +5,8 @@
       "use": "@vercel/python",
       "config": {
         "maxDuration": 60,
-        "includeFiles": ["public/**"]
+        "pythonVersion": "3.12",
+        "includeFiles": ["public/**", "public/*", "public/**/*"]
       }
     }
   ],
