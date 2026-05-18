@@ -31,7 +31,7 @@ external_client = AsyncOpenAI(
 
 # Using gemini-2.5-flash for the best balance of reasoning, speed, and tool-calling stability
 model = OpenAIChatCompletionsModel(
-    model="gemini-3.0-flash",
+    model="gemini-2.5-flash",
     openai_client=external_client
 )
 
