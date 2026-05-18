@@ -4,15 +4,30 @@
       "src": "server.py",
       "use": "@vercel/python",
       "config": {
-        "maxDuration": 60,
-        "includeFiles": ["public/**"]
+        "maxDuration": 60
       }
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "server.py"
+      "source": "/chat",
+      "destination": "/server.py"
+    },
+    {
+      "source": "/ws/(.*)",
+      "destination": "/server.py"
+    },
+    {
+      "source": "/(.*)\\.(css|js|ico|html)",
+      "destination": "/public/$1.$2"
+    },
+    {
+      "source": "/",
+      "destination": "/public/index.html"
     }
   ]
 }
