@@ -5,8 +5,8 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "openai>=1.80.0",
-    "openai-agents>=0.0.20",
+    "openai>=2.26.0",
+    "openai-agents>=0.17.2",
     "python-dotenv>=1.1.0",
     "tavily-python>=0.7.2",
     "fastapi>=0.115.0",
