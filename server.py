@@ -14,10 +14,6 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, PlainTextResponse
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Islamic Guidance Assistant")
 
@@ -28,12 +24,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve static files (CSS, JS, assets)
+# Serve static files (CSS, JS, assets) - mount optionally if public folder exists
 PUBLIC_DIR = Path(__file__).resolve().parent / "public"
 if PUBLIC_DIR.exists():
-    app.mount("/public", StaticFiles(directory=str(PUBLIC_DIR)), name="public")
-else:
-    raise RuntimeError(f"Public folder not found: {PUBLIC_DIR}")
+    try:
+        app.mount("/public", StaticFiles(directory=str(PUBLIC_DIR)), name="public")
+    except Exception as e:
+        print(f"Warning: Could not mount public folder: {e}")
 
 # Session memory store: {session_id: [(q, a), ...]}
 session_memory: dict[str, list] = {}
